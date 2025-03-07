@@ -1,8 +1,8 @@
 import yt_dlp
-from tqdm import tqdm
 import os
 import hashlib
 from .logger import setup_logger
+from .ui import create_progress_bar, display_status
 
 logger = setup_logger()
 
@@ -10,6 +10,7 @@ class VideoDownloader:
     def __init__(self, config):
         self.config = config
         self.downloaded_urls = set()
+        self.progress = create_progress_bar()
 
     def _get_video_id(self, url):
         """Generate a unique identifier for the video URL"""
@@ -20,7 +21,7 @@ class VideoDownloader:
         video_id = self._get_video_id(url)
 
         if video_id in self.downloaded_urls:
-            logger.info(f"Video already downloaded: {url}")
+            display_status(f"Video already downloaded: {url}", style="bold yellow")
             return
 
         def progress_hook(d):
@@ -34,8 +35,8 @@ class VideoDownloader:
                     percentage = 0
 
                 # Update progress bar
-                if hasattr(self, 'pbar'):
-                    self.pbar.update(percentage - self.pbar.n)
+                if hasattr(self, 'task'):
+                    self.task.update(completed=percentage)
 
         ydl_opts = {
             'format': 'best',
@@ -45,19 +46,22 @@ class VideoDownloader:
         }
 
         try:
-            # Create progress bar
-            self.pbar = tqdm(total=100, desc='Downloading', unit='%')
+            display_status(f"Starting download: {url}")
 
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                logger.info(f"Starting download: {url}")
-                ydl.download([url])
+            with self.progress:
+                self.task = self.progress.add_task(
+                    f"[cyan]Downloading: {url}",
+                    total=100
+                )
 
-            self.pbar.close()
-            logger.info(f"Download completed: {url}")
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    logger.info(f"Starting download: {url}")
+                    ydl.download([url])
+
+            display_status(f"Successfully downloaded: {url}", style="bold green")
             self.downloaded_urls.add(video_id)
 
         except Exception as e:
-            if hasattr(self, 'pbar'):
-                self.pbar.close()
+            display_status(f"Failed to download: {url}\nError: {str(e)}", style="bold red")
             logger.error(f"Download failed for {url}: {str(e)}")
             raise

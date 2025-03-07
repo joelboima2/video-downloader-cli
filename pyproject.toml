@@ -12,6 +12,7 @@ dependencies = [
     "pip>=25.0.1",
     "pyperclip>=1.9.0",
     "pyyaml>=6.0.2",
+    "rich>=13.9.4",
     "tqdm>=4.67.1",
     "wheel>=0.45.1",
     "yt-dlp>=2025.2.19",

@@ -14,6 +14,7 @@ class ClipboardMonitor:
         self.last_clipboard = ''
         self.verify_clipboard_access()
         self.processed_urls = set()
+        logger.debug("ClipboardMonitor initialized with config")
 
     def verify_clipboard_access(self):
         """Verify clipboard access is working"""
@@ -29,13 +30,14 @@ class ClipboardMonitor:
         """Start monitoring the clipboard for video URLs"""
         logger.info("Started clipboard monitoring")
         logger.info("Waiting for video URLs to be copied...")
+        logger.debug("Supported platforms: YouTube, Facebook, Twitter, Instagram")
 
         while True:
             try:
                 current_clipboard = pyperclip.paste()
 
                 if current_clipboard and current_clipboard != self.last_clipboard:
-                    logger.debug(f"New clipboard content detected")
+                    logger.debug(f"New clipboard content detected: {current_clipboard[:50]}...")
                     self.last_clipboard = current_clipboard
                     self.process_clipboard_content(current_clipboard)
 
@@ -62,7 +64,7 @@ class ClipboardMonitor:
                 continue
 
             if self.url_validator.is_supported_video_url(url):
-                logger.info(f"Found video URL: {url}")
+                logger.info(f"Found supported video URL: {url}")
                 self.process_url(url)
                 self.processed_urls.add(url)
             else:
