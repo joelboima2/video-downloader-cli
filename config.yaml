@@ -1,0 +1,13 @@
+# Video Downloader Configuration
+
+# Directory where videos will be downloaded
+download_path: ~/Downloads
+
+# Supported video platforms
+supported_platforms:
+  - youtube.com
+  - youtu.be
+  - facebook.com
+  - fb.watch
+  - twitter.com
+  - instagram.com

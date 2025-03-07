@@ -1,0 +1,12 @@
+[project]
+name = "repl-nix-workspace"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1.8",
+    "pyperclip>=1.9.0",
+    "pyyaml>=6.0.2",
+    "tqdm>=4.67.1",
+    "yt-dlp>=2025.2.19",
+]
