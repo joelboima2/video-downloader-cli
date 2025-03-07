@@ -13,6 +13,7 @@ class ClipboardMonitor:
         self.downloader = VideoDownloader(config)
         self.last_clipboard = ''
         self.verify_clipboard_access()
+        self.processed_urls = set()
 
     def verify_clipboard_access(self):
         """Verify clipboard access is working"""
@@ -56,9 +57,14 @@ class ClipboardMonitor:
             return
 
         for url in urls:
+            if url in self.processed_urls:
+                logger.info(f"Skipping already processed URL: {url}")
+                continue
+
             if self.url_validator.is_supported_video_url(url):
                 logger.info(f"Found video URL: {url}")
                 self.process_url(url)
+                self.processed_urls.add(url)
             else:
                 logger.debug(f"Unsupported URL format: {url}")
 
