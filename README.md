@@ -12,6 +12,9 @@ A command-line interface (CLI) tool that monitors your clipboard for video links
 - Support for multiple video platforms
 - Configurable download directory
 - Cross-platform support (Windows, macOS, Linux)
+- Multiple video quality options
+- Custom output format selection
+- Download history tracking
 
 ## Installation
 
@@ -56,16 +59,21 @@ pip install video-downloader-cli
 
 ## Usage
 
-### Start Monitoring Clipboard
+### Basic Usage
 ```bash
 video-downloader start
 ```
 
-### Options
+### Advanced Options
 - `--output-dir`, `-o`: Specify custom download directory
 - `--manual-url`, `-u`: Download a specific URL without clipboard monitoring
-- `--no-monitor`: Disable clipboard monitoring
+- `--auto/--no-auto`: Enable/disable automatic clipboard monitoring
+- `--quality`, `-q`: Set video quality (best, medium, 720p, 480p)
+- `--format`, `-f`: Choose output format (mp4, webm, mkv)
 - `--verbose`, `-v`: Enable verbose logging
+- `--quiet`, `-q`: Suppress all output except errors
+- `--progress/--no-progress`: Show/hide progress bar
+- `--download-archive`, `-a`: File to record downloaded videos
 
 ### Examples
 
@@ -74,15 +82,46 @@ video-downloader start
 video-downloader start
 ```
 
-2. Specify custom download directory:
+2. Download high-quality MP4:
 ```bash
-video-downloader start -o ~/Videos
+video-downloader start -q best -f mp4
 ```
 
-3. Download a specific URL:
+3. Manual download with specific quality:
 ```bash
-video-downloader start -u https://youtube.com/watch?v=example
+video-downloader start -u https://youtube.com/watch?v=example -q 720p
 ```
+
+4. Disable automatic monitoring:
+```bash
+video-downloader start --no-auto -u https://youtube.com/watch?v=example
+```
+
+5. Custom download directory with progress tracking:
+```bash
+video-downloader start -o ~/Videos --progress
+```
+
+### Handling YouTube Authentication
+
+Some YouTube videos may require authentication. If you encounter a "Sign in to confirm you're not a bot" error, try these solutions:
+
+1. Use Browser Cookies:
+   - Install the yt-dlp browser extension
+   - Export cookies from your browser (Chrome, Firefox, Safari, or Edge)
+   - The tool will automatically try to use cookies from installed browsers
+   - Make sure you're logged into YouTube in your browser
+
+2. Alternative Solutions:
+   - Try a different video URL
+   - Use non-age-restricted videos
+   - If using auto-monitoring, copy a different video URL
+
+3. Troubleshooting Tips:
+   - Clear browser cookies and log in to YouTube again
+   - Try using a different browser
+   - Ensure you have the latest version of yt-dlp installed
+
 
 ## Configuration
 
@@ -121,4 +160,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-If you encounter any issues or have questions, please [open an issue](https://github.com/joelboima2/video-downloader-cli/issues) on GitHub.# video-downloader-cli
+If you encounter any issues or have questions, please [open an issue](https://github.com/joelboima2/video-downloader-cli/issues) on GitHub.

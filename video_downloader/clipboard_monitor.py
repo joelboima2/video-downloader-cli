@@ -3,18 +3,21 @@ import time
 from .url_validator import URLValidator
 from .downloader import VideoDownloader
 from .logger import setup_logger
+from .ui import display_status
 
 logger = setup_logger()
 
 class ClipboardMonitor:
-    def __init__(self, config):
+    def __init__(self, config, options=None):
         self.config = config
+        self.options = options or {}
         self.url_validator = URLValidator()
-        self.downloader = VideoDownloader(config)
+        self.downloader = VideoDownloader(config, self.options)
         self.last_clipboard = ''
         self.verify_clipboard_access()
         self.processed_urls = set()
         logger.debug("ClipboardMonitor initialized with config")
+        logger.debug(f"Options: {self.options}")
 
     def verify_clipboard_access(self):
         """Verify clipboard access is working"""

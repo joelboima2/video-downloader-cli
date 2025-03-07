@@ -27,7 +27,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python -m video_downloader.cli start --verbose"
+args = "python -m video_downloader.cli start --no-auto -u https://www.youtube.com/watch?v=dQw4w9WgXcQ --quality 720p --format mp4 --progress -a downloads.txt --verbose"
 
 [deployment]
-run = ["sh", "-c", "python -m video_downloader.cli start --verbose"]
+run = ["sh", "-c", "python -m video_downloader.cli start --no-auto -u https://www.youtube.com/watch?v=dQw4w9WgXcQ --quality 720p --format mp4 --progress -a downloads.txt --verbose"]
