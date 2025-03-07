@@ -11,7 +11,7 @@ A command-line interface (CLI) tool that monitors your clipboard for video links
 - Progress bar for download tracking
 - Support for multiple video platforms
 - Configurable download directory
-- Cross-platform support (Windows, macOS, Linux, Termux)
+- Cross-platform support (Windows, macOS, Linux)
 
 ## Installation
 
@@ -35,13 +35,6 @@ sudo dnf install xclip
 # Arch Linux
 sudo pacman -S xclip
 ```
-
-#### Termux (Android)
-Install Termux API package:
-```bash
-pkg install termux-api
-```
-Then install the Termux:API app from the Play Store or F-Droid.
 
 ### Installing from Source
 
@@ -122,15 +115,10 @@ No common issues reported.
 ### macOS
 No common issues reported.
 
-### Termux
-- Ensure both Termux:API app and termux-api package are installed
-- If clipboard access fails, try reinstalling the Termux:API app
-- Make sure Termux has permission to access clipboard
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 
-If you encounter any issues or have questions, please [open an issue](https://github.com/joelboima2/video-downloader-cli/issues) on GitHub.
+If you encounter any issues or have questions, please [open an issue](https://github.com/joelboima2/video-downloader-cli/issues) on GitHub.# video-downloader-cli

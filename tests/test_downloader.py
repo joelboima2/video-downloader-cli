@@ -10,46 +10,19 @@ class TestDownloader(unittest.TestCase):
         self.downloader = VideoDownloader(self.config)
 
     @patch('yt_dlp.YoutubeDL')
-    def test_download_progress_tracking(self, mock_ytdl):
+    def test_download_success(self, mock_ytdl):
         # Mock the YoutubeDL instance
         mock_ytdl_instance = MagicMock()
         mock_ytdl.return_value.__enter__.return_value = mock_ytdl_instance
 
-        # Test URL
         test_url = "https://youtube.com/watch?v=test123"
-
-        # Track progress hook calls
-        progress_events = []
-
-        def capture_progress(d):
-            progress_events.append(d)
-
-        # Configure mock download
-        mock_ytdl_instance.download.side_effect = lambda urls: [
-            capture_progress({
-                'status': 'downloading',
-                'downloaded_bytes': 5000000,
-                'total_bytes': 10000000,
-            }),
-            capture_progress({
-                'status': 'downloading',
-                'downloaded_bytes': 10000000,
-                'total_bytes': 10000000,
-            }),
-            capture_progress({'status': 'finished'})
-        ]
-
-        # Perform download
         self.downloader.download(test_url)
 
-        # Verify progress tracking
-        self.assertEqual(len(progress_events), 3)
-        self.assertEqual(progress_events[0]['status'], 'downloading')
-        self.assertEqual(progress_events[1]['status'], 'downloading')
-        self.assertEqual(progress_events[2]['status'], 'finished')
+        # Verify download was called
+        mock_ytdl_instance.download.assert_called_once_with([test_url])
 
     @patch('yt_dlp.YoutubeDL')
-    def test_download_error_handling(self, mock_ytdl):
+    def test_download_failure(self, mock_ytdl):
         # Mock YoutubeDL to raise an exception
         mock_ytdl.return_value.__enter__.return_value.download.side_effect = Exception("Download failed")
 

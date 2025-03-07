@@ -3,46 +3,18 @@ from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRe
 from rich.panel import Panel
 from rich.text import Text
 import shutil
-import pyfiglet
 
 def get_logo():
     """Return ASCII art logo with dynamic width scaling"""
     terminal_width = shutil.get_terminal_size().columns
-
-    # Create figlet logo with a cool font
-    figlet = pyfiglet.Figlet(font='big')
-    logo_text = figlet.renderText('Video DL')
-
-    # Add a subtitle
-    subtitle = "Download videos with ease!"
-
-    # Center both logo and subtitle
-    lines = logo_text.split('\n')
-    styled_lines = []
-
-    # Create gradient effect using different shades
-    colors = ["cyan", "bright_cyan", "blue", "bright_blue"]
-    for i, line in enumerate(lines):
-        color = colors[min(i, len(colors)-1)]
-        styled_line = Text(line.center(terminal_width), style=f"bold {color}")
-        styled_lines.append(styled_line)
-
-    # Join lines with gradient effect
-    logo_content = Text("\n").join(styled_lines)
-
-    # Add styled subtitle
-    subtitle_text = Text("\n\n" + subtitle.center(terminal_width), 
-                        style="bold magenta")
-
-    # Combine logo and subtitle
-    full_logo = logo_content + subtitle_text
-
-    return Panel(
-        full_logo,
-        border_style="bright_blue",
-        padding=(1, 2),
-        subtitle="[bright_cyan]v1.0.0[/]"
-    )
+    logo = """
+    ╦  ╦╦╔═╗╔═╗╔═╗  ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗╦═╗
+    ╚╗╔╝║╠╣ ║╣ ║ ║   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║║╣ ╠╦╝
+     ╚╝ ╩╚  ╚═╝╚═╝  ═╩╝╚═╝╚╩╝╝╚╝╩═╝╚═╝╩ ╩═╩╝╚═╝╩╚═
+    """
+    # Center the logo based on terminal width
+    centered_logo = '\n'.join(line.center(terminal_width) for line in logo.split('\n'))
+    return Panel(Text(centered_logo, style="bold cyan"))
 
 def create_progress_bar():
     """Create a rich progress bar with enhanced visuals"""

@@ -5,7 +5,7 @@ from rich.console import Console
 from .clipboard_monitor import ClipboardMonitor
 from .config import Config
 from .logger import setup_logger
-from .ui import get_logo, clear_screen, display_status
+from .ui import get_logo, clear_screen
 
 logger = setup_logger()
 console = Console()
@@ -41,7 +41,7 @@ def start(output_dir, manual_url, monitor, verbose):
         monitor_instance = ClipboardMonitor(config)
 
         if manual_url:
-            console.print("\n[cyan]Processing manual URL...[/]")
+            console.print("\nProcessing manual URL...")
             monitor_instance.process_url(manual_url)
             return
 
@@ -49,17 +49,6 @@ def start(output_dir, manual_url, monitor, verbose):
             console.print("[cyan]Starting clipboard monitor. Press Ctrl+C to stop.")
             console.print("[green]Supported platforms: YouTube, Facebook, Twitter, Instagram\n")
             monitor_instance.start_monitoring()
-        else:
-            # Manual input mode
-            console.print("[cyan]Enter video URLs (one per line). Press Ctrl+C to exit.[/]")
-            while True:
-                try:
-                    url = input("\nEnter URL (or press Enter to quit): ").strip()
-                    if not url:
-                        break
-                    monitor_instance.process_url(url)
-                except KeyboardInterrupt:
-                    break
 
     except KeyboardInterrupt:
         console.print("\n[yellow]Shutting down gracefully...[/]")
