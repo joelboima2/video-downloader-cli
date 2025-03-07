@@ -10,6 +10,7 @@ dependencies = [
     "build>=1.2.2.post1",
     "click>=8.1.8",
     "pip>=25.0.1",
+    "pyfiglet>=1.0.2",
     "pyperclip>=1.9.0",
     "pyyaml>=6.0.2",
     "rich>=13.9.4",
