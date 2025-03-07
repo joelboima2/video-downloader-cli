@@ -2,22 +2,39 @@
 name = "video-downloader-cli"
 version = "1.0.0"
 description = "CLI tool that monitors clipboard for video links and downloads them automatically"
+readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
 authors = [
     {name = "Video Downloader Team"}
 ]
 dependencies = [
-    "build>=1.2.2.post1",
     "click>=8.1.8",
-    "pip>=25.0.1",
-    "pyfiglet>=1.0.2",
     "pyperclip>=1.9.0",
     "pyyaml>=6.0.2",
     "rich>=13.9.4",
     "tqdm>=4.67.1",
-    "wheel>=0.45.1",
     "yt-dlp>=2025.2.19",
+    "pyfiglet>=1.0.2",
+    "build>=1.2.2.post1",
+    "twine>=6.1.0",
 ]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Internet :: WWW/HTTP :: Browsers",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Utilities"
+]
+
+[project.urls]
+Homepage = "https://github.com/joelboima2/video-downloader-cli"
+Issues = "https://github.com/joelboima2/video-downloader-cli/issues"
 
 [project.scripts]
 video-downloader = "video_downloader.cli:main"

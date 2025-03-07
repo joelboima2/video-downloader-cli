@@ -4,6 +4,9 @@ import hashlib
 from .logger import setup_logger
 from .ui import create_progress_bar, display_status
 from rich.progress import Progress, TaskID
+from typing import Optional
+import platform
+import sys
 
 logger = setup_logger()
 
@@ -24,58 +27,81 @@ class VideoDownloader:
             display_status(f"Video already downloaded: {url}", style="bold yellow")
             return
 
-        # Create progress bar with spinner and time remaining
-        progress = create_progress_bar()
-        download_task = None
+        progress = None
+        task_id = None
 
         def progress_hook(d):
             """Handle download progress updates"""
-            nonlocal download_task
+            nonlocal progress, task_id
             try:
+                if progress is None:
+                    progress = create_progress_bar()
+
                 if d['status'] == 'downloading':
-                    # Initialize download task if needed
-                    if download_task is None:
-                        download_task = progress.add_task(
+                    if task_id is None:
+                        task_id = progress.add_task(
                             description=f"[cyan]Downloading {url}",
                             total=100.0,
                             completed=0.0
                         )
-                        logger.debug("Created download task")
+                        logger.debug(f"Created progress task: {task_id}")
 
-                    # Calculate and update progress
+                    # Calculate progress percentage
                     downloaded = d.get('downloaded_bytes', 0)
                     total = d.get('total_bytes', d.get('total_bytes_estimate', 0))
 
                     if total > 0:
-                        percentage = min((downloaded / total) * 100, 100.0)
-                        logger.debug(f"Download progress: {percentage:.1f}%")
-                        progress.update(
-                            task_id=download_task,
-                            completed=percentage
-                        )
+                        percentage = (downloaded / total) * 100.0
+                        logger.debug(f"Download progress: {downloaded}/{total} bytes ({percentage:.1f}%)")
+                        if task_id is not None:
+                            progress.update(task_id, completed=min(percentage, 100.0))
+                    else:
+                        logger.debug("Download size unknown, showing indeterminate progress")
+                        if task_id is not None:
+                            progress.update(task_id, completed=0.0)
 
-                elif d['status'] == 'finished' and download_task is not None:
+                elif d['status'] == 'finished' and task_id is not None:
                     logger.debug("Download finished, setting progress to 100%")
-                    progress.update(download_task, completed=100.0)
+                    progress.update(task_id, completed=100.0)
 
             except Exception as e:
                 logger.error(f"Progress hook error: {str(e)}")
-                logger.debug(f"Progress state: {d}")
+                logger.debug(f"Progress state - task_id: {task_id}, status: {d}")
 
-        # Configure yt-dlp options
+        # Configure platform-specific browser for cookies
+        system = platform.system().lower()
+        if system == 'linux':
+            browser = 'firefox'
+        elif system == 'darwin':
+            browser = 'safari'
+        else:
+            browser = 'chrome'
+
+        # Configure yt-dlp options with platform-specific settings
         ydl_opts = {
-            'format': 'best',  # Download best quality
+            'format': 'best',
             'outtmpl': os.path.join(self.config.download_path, '%(title)s.%(ext)s'),
             'progress_hooks': [progress_hook],
-            'quiet': True,  # Let us handle the output
+            'quiet': True,
+            'cookiesfrombrowser': (browser,),  # Use platform-specific browser cookies
+            'ignoreerrors': True,
+            'no_warnings': True,
+            'extract_flat': False,
+            # Facebook-specific options
+            'extractor_args': {
+                'facebook': {
+                    'api': ['consent=1'],  # Accept cookies consent
+                }
+            }
         }
 
         try:
             display_status(f"Starting download: {url}")
+            logger.info(f"Starting download: {url}")
 
-            # Ensure progress bar is visible during download
+            # Create and maintain progress bar context
+            progress = create_progress_bar()
             with progress:
-                logger.debug("Starting download with yt-dlp")
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     ydl.download([url])
 
