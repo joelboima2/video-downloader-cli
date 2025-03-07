@@ -1,5 +1,8 @@
 # Video Downloader CLI
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+
 A command-line interface (CLI) tool that monitors your clipboard for video links and automatically downloads them. Supports YouTube, Facebook, Twitter, and Instagram videos.
 
 ## Features
@@ -33,8 +36,20 @@ sudo dnf install xclip
 sudo pacman -S xclip
 ```
 
-### Installing the Package
+### Installing from Source
 
+1. Clone the repository:
+```bash
+git clone https://github.com/joelboima2/video-downloader-cli.git
+cd video-downloader-cli
+```
+
+2. Install the package:
+```bash
+pip install .
+```
+
+### Installing from PyPI
 ```bash
 pip install video-downloader-cli
 ```
@@ -85,6 +100,10 @@ supported_platforms:
   - instagram.com
 ```
 
+## Development
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+
 ## Troubleshooting
 
 ### Linux
@@ -98,4 +117,8 @@ No common issues reported.
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+If you encounter any issues or have questions, please [open an issue](https://github.com/joelboima2/video-downloader-cli/issues) on GitHub.
